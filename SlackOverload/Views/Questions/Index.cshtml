@@ -1,0 +1,33 @@
+﻿@model List<Question>
+@{
+    ViewData["Title"] = "All questions";
+}
+
+@if (SlackData.CurrentUser != null)
+{
+<h1>Welcome @SlackData.CurrentUser</h1><br />
+}
+
+<h2>All questions</h2><br />
+
+@foreach (Question q in Model)
+{
+    <div class="question-preview">
+        <div class="stats-container"></div>
+        <div class="preivew">
+            <h3><a href="/questions/question?id=@q.questionId">@q.title</a></h3>
+            <div class="summary">
+                <p>
+                    @if (q.description.Length > 100)
+                    {
+                        @q.description.Substring(0,100)
+                    }
+                    else
+                    {
+                        @q.description
+                    }
+                </p>
+            </div>
+        </div>
+    </div>
+}

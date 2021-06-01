@@ -1,0 +1,52 @@
+﻿@model List<Answer>
+@{
+    ViewData["Title"] = ViewData["QuestionTitle"];
+}
+
+
+<div class="page-container">
+    <div class="question-container">
+        <div class="question-header">
+            <h1 class="question-header-title">@ViewData["QuestionTitle"]</h1>
+            <span class="question-header-data">Asked on @ViewData["QuestionDate"]</span>       
+            <span class="question-header-data">Status @ViewData["QuestionStatus"]</span>      
+        </div>
+        <div class="question-description">
+            @ViewData["QuestionSummary"]
+        </div>
+        <div class="question-tags">
+            Tags: @ViewData["QuestionTags"]
+        </div>
+        @if (SlackData.CurrentUser == "admin" || SlackData.CurrentUser == (string)ViewData["QuestionUser"])
+            {
+                <div class="options">
+                    <a href="/questions/deletequestion?id=@ViewData["QuestionId"]" class="btn btn-danger">Delete</a>
+                    <a href="/questions/editquestion?id=@ViewData["QuestionId"]" class="btn btn-primary">Edit</a>
+                </div>
+            }
+    </div>
+
+    @foreach (Answer ans in Model)
+    {
+        <div class="answer-container" id="@ans.answerId">
+            <div class="answer-header">
+                <span>User: @ans.username</span>
+                <span>Posted: @ans.posted</span>
+            </div>
+            <div class="answer-description">
+                <p>@ans.description</p>
+            </div>
+            @if (SlackData.CurrentUser == "admin" || SlackData.CurrentUser == ans.username)
+                {
+                    <a href="/questions/editanswer?id=@ans.answerId" class="btn btn-primary">Edit</a>
+                    <a href="/questions/deleteanswer?id=@ans.answerId" class="btn btn-danger">Delete</a>
+                }
+        </div>
+    }
+   
+    @if (Model.Count < 1)
+    {
+        <div>No responses yet!</div>
+    }
+
+</div>
